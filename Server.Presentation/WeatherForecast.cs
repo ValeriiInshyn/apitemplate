@@ -1,4 +1,4 @@
-namespace Server.Api;
+namespace Server.Presentation;
 
 public class WeatherForecast
 {
