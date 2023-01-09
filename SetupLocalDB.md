@@ -58,18 +58,26 @@ CREATE TABLE [User]
 
 CREATE TABLE [UserToRole]
 (
-	[UserId] [int] FOREIGN KEY REFERENCES [User](Id),
-	[RoleId] [int] FOREIGN KEY REFERENCES [Role](Id)
+	[UserId] [int] FOREIGN KEY REFERENCES [User](Id) NOT NULL,
+	[RoleId] [int] FOREIGN KEY REFERENCES [Role](Id) NOT NULL,
+	PRIMARY KEY([UserId], [RoleId])
 )
 
 CREATE TABLE [UserInfo]
 (
 	[Firstname] [varchar](50),
 	[LastName] [varchar](50),
-	[User] [int] FOREIGN KEY REFERENCES  [User](Id)
+	[User] [int] PRIMARY KEY FOREIGN KEY REFERENCES  [User](Id)
 	ON DELETE CASCADE
 	ON UPDATE CASCADE,
 
 )
+```
 
+### Scaffold database
+You should change connection string, especially change 'Server root' and 'Initial catalog value' to your database name. 
+Also, you can add username and password if your SQL Server wants authentication. 
+Then just copy and put it on terminal.
+```shell
+dotnet ef dbcontext scaffold --project Server.Infrastructure\Server.Infrastructure.csproj --startup-project Server.Presentation\Server.Presentation.csproj --configuration Debug "Server=(localdb)\MSSQLLocalDB;Initial Catalog=ApiTemplate;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=True" "Microsoft.EntityFrameworkCore.SqlServer" --data-annotations --context AppDbContext --context-dir Database --context-namespace  Server.Infrastructure.Database --namespace Server.Domain.Scaffolded  --output-dir ..\Server.Domain\Scaffolded --no-onconfiguring --force
 ```
