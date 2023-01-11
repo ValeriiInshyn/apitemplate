@@ -51,9 +51,10 @@ public abstract partial class BaseRepo<TContext, TEntity> : IBaseRepo<TEntity>
         return entity;
     }
 
-    public Task DeleteAsync(TEntity entity)
+    public async Task DeleteAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        DeleteNoSave(entity);
+        await SaveChangesAsync();
     }
 
     public async Task DeleteAsync(object id)
@@ -64,9 +65,10 @@ public abstract partial class BaseRepo<TContext, TEntity> : IBaseRepo<TEntity>
         await SaveChangesAsync();
     }
 
-    public Task UpdateAsync(TEntity entity)
+    public async Task UpdateAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        UpdateNoSave(entity);
+        await SaveChangesAsync();
     }
 
     public void Attach(TEntity entity)
@@ -89,14 +91,9 @@ public abstract partial class BaseRepo<TContext, TEntity> : IBaseRepo<TEntity>
         DbSet.Remove(entity);
     }
 
-    public void DeleteNoSave(object id)
-    {
-        throw new NotImplementedException();
-    }
-
     public void UpdateNoSave(TEntity entity)
     {
-        throw new NotImplementedException();
+        DbSet.Update(entity);
     }
 
     public Task<IEnumerable<TEntity>> CreateRangeAsync(IEnumerable<TEntity> entities)

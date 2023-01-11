@@ -44,8 +44,6 @@ public partial interface IBaseRepo<TEntity> where TEntity : class
 
     void DeleteNoSave(TEntity entity);
 
-    void DeleteNoSave(object id);
-
     void UpdateNoSave(TEntity entity);
 
     #endregion
