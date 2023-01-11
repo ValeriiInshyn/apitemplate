@@ -26,22 +26,16 @@ public partial class User
 
     public int? GroupId { get; set; }
 
-    public int? Role { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     [ForeignKey("GroupId")]
     [InverseProperty("Users")]
     public virtual Group? Group { get; set; }
 
-    [ForeignKey("Role")]
-    [InverseProperty("Users")]
-    public virtual Role? RoleNavigation { get; set; }
-
     [InverseProperty("UserNavigation")]
     public virtual UserInfo? UserInfo { get; set; }
 
     [ForeignKey("UserId")]
-    [InverseProperty("UsersNavigation")]
+    [InverseProperty("Users")]
     public virtual ICollection<Role> Roles { get; } = new List<Role>();
 }

@@ -16,10 +16,7 @@ public partial class Role
     [Unicode(false)]
     public string Name { get; set; } = null!;
 
-    [InverseProperty("RoleNavigation")]
-    public virtual ICollection<User> Users { get; } = new List<User>();
-
     [ForeignKey("RoleId")]
     [InverseProperty("Roles")]
-    public virtual ICollection<User> UsersNavigation { get; } = new List<User>();
+    public virtual ICollection<User> Users { get; } = new List<User>();
 }
