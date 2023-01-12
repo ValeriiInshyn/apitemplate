@@ -70,8 +70,7 @@ public interface IBaseRepo<TEntity> where TEntity : class
         OrderDirection orderDirection);
 
     #endregion
-
-
+    
     #region BasicNoSave
 
     Task CreateNoSaveAsync(TEntity entity);
@@ -81,8 +80,7 @@ public interface IBaseRepo<TEntity> where TEntity : class
     void UpdateNoSave(TEntity entity);
 
     #endregion
-
-
+    
     #region BasicRange
 
     void AttachRange(IEnumerable<TEntity> entities);
