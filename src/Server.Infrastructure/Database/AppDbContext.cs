@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
 using Microsoft.EntityFrameworkCore;
 using Server.Domain.Scaffolded;
+
+#endregion
 
 namespace Server.Infrastructure.Database;
 
@@ -22,15 +24,9 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Group>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Group__3214EC0720C1BDF1");
-        });
+        modelBuilder.Entity<Group>(entity => { entity.HasKey(e => e.Id).HasName("PK__Group__3214EC0720C1BDF1"); });
 
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Role__3214EC07F0A6FBA2");
-        });
+        modelBuilder.Entity<Role>(entity => { entity.HasKey(e => e.Id).HasName("PK__Role__3214EC07F0A6FBA2"); });
 
         modelBuilder.Entity<User>(entity =>
         {
@@ -62,7 +58,8 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.User).ValueGeneratedNever();
 
-            entity.HasOne(d => d.UserNavigation).WithOne(p => p.UserInfo).HasConstraintName("FK__UserInfo__User__0E6E26BF");
+            entity.HasOne(d => d.UserNavigation).WithOne(p => p.UserInfo)
+                .HasConstraintName("FK__UserInfo__User__0E6E26BF");
         });
 
         OnModelCreatingPartial(modelBuilder);

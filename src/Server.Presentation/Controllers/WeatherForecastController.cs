@@ -1,4 +1,8 @@
+#region
+
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace Server.Presentation.Controllers;
 
@@ -6,7 +10,7 @@ namespace Server.Presentation.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
+    private static readonly string[] Summaries =
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
@@ -44,6 +48,7 @@ public class WeatherForecastController : ControllerBase
             _logger.LogError(ex.Message, "This is demo exception");
             return BadRequest();
         }
+
         return Ok();
     }
 

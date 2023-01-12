@@ -1,24 +1,13 @@
-#region @copyright by IntenseLab 2022
+#region
 
-// // // /////////////////////////////////////////////////////////////////////////////////////
-// // // Product name: B2C-QuoteMedia-Data-Services
-// // // Product short name: B2C-QM-Admin
-// // // Vendor: IntenseLab LLC
-// // // License: IntenseLab License
-// // // Vendor mail: info@intenselab.com
-// // //
-// // // Product version: v1.0.1.100
-// // // Product description: www.intenselab.com/go/en/solutions
-// // // /////////////////////////////////////////////////////////////////////////////////////
-
-#endregion
-
-using Microsoft.EntityFrameworkCore;
-using Server.Application.Repositories.BaseRepos;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Server.Contracts.Exceptions;
+using Server.Application.Repositories.BaseRepos;
+using Server.Contracts.SubTypes;
+using Server.Infrastructure.Repositories.Extensions;
+
+#endregion
 
 namespace Server.Infrastructure.Repositories.BaseRepos;
 
@@ -34,9 +23,15 @@ public abstract partial class BaseRepo<TContext, TEntity> : IBaseRepo<TEntity>
         DbSet = context.Set<TEntity>();
     }
 
+
     public IQueryable<TEntity> GetAll()
     {
         return DbSet;
+    }
+
+    public IQueryable<TEntity> GetAll(string orderBy, OrderDirection orderDirection)
+    {
+        return DbSet.OrderByWithDirection(orderBy, orderDirection);
     }
 
     public async Task<TEntity?> GetByIdAsync(object id, CancellationToken token)
@@ -44,85 +39,16 @@ public abstract partial class BaseRepo<TContext, TEntity> : IBaseRepo<TEntity>
         return await DbSet.FindAsync(new[] { id }, token);
     }
 
-    public async Task<TEntity> CreateAsync(TEntity entity)
-    {
-        await CreateNoSaveAsync(entity);
-        await SaveChangesAsync();
-        return entity;
-    }
-
-    public async Task DeleteAsync(TEntity entity)
-    {
-        DeleteNoSave(entity);
-        await SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(object id)
-    {
-        TEntity entity = await GetByIdAsync(id, CancellationToken.None) ??
-                         throw new EntityNotFoundByIdException<TEntity>(id);
-        DeleteNoSave(entity);
-        await SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(TEntity entity)
-    {
-        UpdateNoSave(entity);
-        await SaveChangesAsync();
-    }
-
-    public void Attach(TEntity entity)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
     }
 
-    public async Task CreateNoSaveAsync(TEntity entity)
+    public IQueryable<TEntity> IncludeIfNotNull(
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null)
     {
-        await DbSet.AddAsync(entity);
-    }
-
-    public void DeleteNoSave(TEntity entity)
-    {
-        DbSet.Remove(entity);
-    }
-
-    public void UpdateNoSave(TEntity entity)
-    {
-        DbSet.Update(entity);
-    }
-
-    public Task<IEnumerable<TEntity>> CreateRangeAsync(IEnumerable<TEntity> entities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateRangeAsync(IEnumerable<TEntity> entities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateRangeNoSave(IEnumerable<TEntity> entities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void AttachRange(IEnumerable<TEntity> entities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteRangeAsync(IEnumerable<TEntity> entities)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void DeleteNoSaveRange(IEnumerable<TEntity> entities)
-    {
-        throw new NotImplementedException();
+        if (includes is null)
+            return DbSet;
+        return includes(DbSet);
     }
 }

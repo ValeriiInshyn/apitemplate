@@ -1,4 +1,8 @@
+#region
+
 using Serilog.Events;
+
+#endregion
 
 namespace Server.Contracts.Exceptions;
 
@@ -12,6 +16,11 @@ public class ApiException : Exception
     ///     Gets or sets the value of the log level
     /// </summary>
     private readonly LogEventLevel _logLevel = LogEventLevel.Fatal;
+
+    /// <summary>
+    ///     Gets the value of the status code
+    /// </summary>
+    private int StatusCode = 500;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ApiException" /> class
@@ -32,11 +41,6 @@ public class ApiException : Exception
     protected ApiException()
     {
     }
-
-    /// <summary>
-    ///     Gets the value of the status code
-    /// </summary>
-    private int StatusCode = 500;
 
     /// <summary>
     ///     Gets the value of the message

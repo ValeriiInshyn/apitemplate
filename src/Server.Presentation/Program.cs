@@ -1,4 +1,8 @@
+#region
+
 using Serilog;
+
+#endregion
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json").Build();
