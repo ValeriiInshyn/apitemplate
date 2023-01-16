@@ -27,7 +27,14 @@ public sealed class ExceptionHandlingMiddleware
         }
         catch (ApiException ex)
         {
-           _logger.Write(ex.GetLevel(), ex,ex.GetType().ToString(), ex.Description);
+            ProblemDetails problemDetails = new()
+            {
+                Status = ex.StatusCode,
+                Type = ex.GetType().Name,
+                Title = ex.Message,
+                Detail = ex.Description
+            };
+           _logger.Write(ex.GetLevel(), ex,JsonSerializer.Serialize(problemDetails), ex.Description);
            await HandleExceptionAsync(context, ex);
         }
         catch (Exception ex)
@@ -39,16 +46,8 @@ public sealed class ExceptionHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, ApiException ex)
     {
-        ProblemDetails problemDetails = new()
-        {
-            Status = ex.StatusCode,
-            Type = ex.GetType().ToString(),
-            Title = ex.Message,
-            Detail = ex.Description
-        };
-        
         context.Response.ContentType = "application/json";
-        return context.Response.WriteAsJsonAsync(JsonSerializer.Serialize(problemDetails));;
+        return context.Response.WriteAsJsonAsync(ex.ToString());;
     }
     
     private static Task HandleExceptionAsync(HttpContext context, Exception ex)
