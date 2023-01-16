@@ -20,7 +20,7 @@ public class ApiException : Exception
     /// <summary>
     ///     Gets the value of the status code
     /// </summary>
-    private int StatusCode = 500;
+    public int StatusCode = 500;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ApiException" /> class
@@ -45,7 +45,7 @@ public class ApiException : Exception
     /// <summary>
     ///     Gets the value of the message
     /// </summary>
-    private string Description { get; } = "Unhandled exception occured";
+    public string Description { get; } = "Unhandled exception occured";
 
     public LogEventLevel GetLevel()
     {

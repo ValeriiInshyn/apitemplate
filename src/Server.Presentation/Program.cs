@@ -1,6 +1,8 @@
 #region
 
 using Serilog;
+using Server.Application.Repositories.BaseRepos;
+using Server.Infrastructure.Middlewares;
 
 #endregion
 
@@ -23,6 +25,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton(Log.Logger);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +40,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.MapControllers();
+
+
 
 app.Run();

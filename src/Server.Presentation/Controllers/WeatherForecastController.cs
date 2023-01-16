@@ -1,6 +1,8 @@
 #region
 
 using Microsoft.AspNetCore.Mvc;
+using Server.Contracts.Exceptions;
+using Server.Domain.Scaffolded;
 
 #endregion
 
@@ -39,17 +41,7 @@ public class WeatherForecastController : ControllerBase
     [Route("LogExceptionTest")]
     public IActionResult GetException()
     {
-        try
-        {
-            throw new Exception("Test exception logging");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message, "This is demo exception");
-            return BadRequest();
-        }
-
-        return Ok();
+        throw new EntityNotFoundByIdException<User>(9);
     }
 
     [HttpGet]
