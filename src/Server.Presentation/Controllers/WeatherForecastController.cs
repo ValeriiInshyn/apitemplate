@@ -9,6 +9,7 @@ using Server.Domain.Scaffolded;
 namespace Server.Presentation.Controllers;
 
 [ApiController]
+[ApiVersion("1.0", Deprecated = false)]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
