@@ -1,5 +1,6 @@
 #region
 
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Serilog;
 using Server.Presentation;
 
@@ -15,26 +16,30 @@ services.AddSerilog(configuration);
 services.AddRepositories();
 services.AddServices();
 services.AddApiVersioningSupport();
-
+services.AddSwaggerConfiguration();
 builder.Host.UseSerilog();
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    foreach (var description in provider.ApiVersionDescriptions)
+        options.SwaggerEndpoint($"../swagger/{description.GroupName}/swagger.json",
+            description.GroupName.ToUpperInvariant());
+});
+
+app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
-
 app.AddMiddlewares();
+
+app.MapControllers();
 
 app.Run();
