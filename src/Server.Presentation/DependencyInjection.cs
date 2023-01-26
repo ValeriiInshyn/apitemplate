@@ -91,12 +91,19 @@ public static class DependencyInjection
                 }
             };
         });
-
-
     }
 
     #endregion
 
+    #region Configuration
+
+    public static void AddConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AuthOptions>(configuration.GetSection("AuthOptions"));
+    }
+
+    #endregion
+    
     #region Logger
 
     public static void AddSerilog(this IServiceCollection services, IConfiguration configuration)

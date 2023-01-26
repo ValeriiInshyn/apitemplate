@@ -12,6 +12,7 @@ var configuration = new ConfigurationBuilder()
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
+services.AddConfiguration(configuration);
 services.AddSerilog(configuration);
 services.AddRepositories();
 services.AddServices();
