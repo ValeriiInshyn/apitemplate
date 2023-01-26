@@ -16,6 +16,7 @@ services.AddSerilog(configuration);
 services.AddRepositories();
 services.AddServices();
 services.AddApiVersioningSupport();
+services.AddJwtAuthentication(configuration);
 services.AddSwaggerConfiguration();
 builder.Host.UseSerilog();
 
